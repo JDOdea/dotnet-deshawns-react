@@ -1,16 +1,23 @@
-import { useEffect, useState } from "react";
+import { Navbar, NavbarBrand, Nav, NavItem, NavLink } from "reactstrap";
 import "./App.css";
-import { getGreeting } from "./apiManager";
+import "bootstrap/dist/css/bootstrap.css";
+
+import { Outlet } from "react-router-dom";
 
 function App() {
-  const [greeting, setGreeting] = useState("Not Connected to the API");
-
-  useEffect(() => {
-    getGreeting().then(setGreeting);
-  }, []);
   return (
     <div className="App">
-      <h1>{greeting.message}</h1>
+      <>
+        <Navbar color="light" expand="md">
+          <Nav navbar>
+            <NavbarBrand href="/">🐕‍🦺 🐩 DeShawn's Dog Walking</NavbarBrand>
+            <NavItem>
+              <NavLink href="/walkers">Walkers</NavLink>
+            </NavItem>
+          </Nav>
+        </Navbar>
+        <Outlet />
+      </>
     </div>
   );
 }

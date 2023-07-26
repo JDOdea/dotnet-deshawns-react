@@ -16,9 +16,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/hello", () =>
+app.MapGet("/api/hello", () =>
 {
-    return new { Message = "Hello from the API!!!" };
+    return new { Message = "Welcome to DeShawn's Dog Walking" };
 });
 
 
