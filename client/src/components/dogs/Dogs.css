@@ -1,0 +1,22 @@
+.dogs {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+}
+
+.dog {
+    background-color: bisque;
+    width: 20rem;
+    height: 10rem;
+    padding: 0.5rem;
+    margin: 2.5rem;
+    border-radius: 1.5rem;
+}
+
+.dog:hover {
+    filter: brightness(0.9);
+}
+
+.dog-header {
+    font-weight: 500;
+}

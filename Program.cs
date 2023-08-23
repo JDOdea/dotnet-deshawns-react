@@ -8,49 +8,85 @@ List<Dog> dogs = new List<Dog>()
     {
         Id = 1,
         Name = "Timmy",
-        Breed = "Border Collie"
+        Breed = "Border Collie",
+        CityId = 3
     },
     new Dog()
     {
         Id = 2,
         Name = "Rocket",
-        Breed = "Terrier"
+        Breed = "Terrier",
+        CityId = 6
     },
     new Dog()
     {
         Id = 3,
         Name = "Finestro",
-        Breed = "Great Dane"
+        Breed = "Great Dane",
+        CityId = 8
     },
     new Dog()
     {
         Id = 4,
         Name = "Big Bear",
-        Breed = "Poodle"
+        Breed = "Poodle",
+        CityId = 8
     },
     new Dog()
     {
         Id = 5,
         Name = "Hazel",
-        Breed = "Sheepdog"
+        Breed = "Sheepdog",
+        CityId = 9
     },
     new Dog()
     {
         Id = 6,
         Name = "Scotty",
-        Breed = "Golden Doodle"
+        Breed = "Golden Doodle",
+        CityId = 7
     },
     new Dog()
     {
         Id = 7,
         Name = "Mac",
-        Breed = "Weiner Dog"
+        Breed = "Weiner Dog",
+        CityId = 3
     },
     new Dog()
     {
         Id = 8,
         Name = "Panda",
-        Breed = "Panda"
+        Breed = "Panda",
+        CityId = 1
+    },
+    new Dog()
+    {
+        Id = 9,
+        Name = "Harold",
+        Breed = "Dachsund",
+        CityId = 4
+    },
+    new Dog()
+    {
+        Id = 10,
+        Name = "Cat",
+        Breed = "Labrador",
+        CityId = 2
+    },
+    new Dog()
+    {
+        Id = 11,
+        Name = "Brutus",
+        Breed = "Golden Retriever",
+        CityId = 5
+    },
+    new Dog()
+    {
+        Id = 12,
+        Name = "Philmore",
+        Breed = "Pug",
+        CityId = 10
     }
 };
 
@@ -185,10 +221,18 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+#region Endpoints
 app.MapGet("/api/hello", () =>
 {
     return new { Message = "Welcome to DeShawn's Dog Walking" };
 });
 
+//  Dogs
+app.MapGet("/api/dogs", () =>
+{
+    return dogs;
+});
+
+#endregion
 
 app.Run();
