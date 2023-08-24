@@ -202,7 +202,7 @@ List<Walker> walkers = new List<Walker>()
 
 #endregion
 
-
+#region Default Needs
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -220,17 +220,37 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+#endregion
 
 #region Endpoints
+//  Get Message
 app.MapGet("/api/hello", () =>
 {
     return new { Message = "Welcome to DeShawn's Dog Walking" };
 });
 
-//  Dogs
+#region DogEndpoints
+//  Get Dogs
 app.MapGet("/api/dogs", () =>
 {
     return dogs;
+});
+
+//  Post Dog
+app.MapPost("/api/dogs", (Dog dog) =>
+{
+    dog.Id = dogs.Count > 0 ? dogs.Max(d => d.Id) + 1 : 1;
+    //TEMP CODE
+    dog.CityId = 1;
+    dogs.Add(dog);
+    return dog;
+});
+
+#endregion
+
+app.MapGet("/api/cities", () =>
+{
+    return cities;
 });
 
 #endregion
