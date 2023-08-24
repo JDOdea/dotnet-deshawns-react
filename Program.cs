@@ -248,10 +248,13 @@ app.MapPost("/api/dogs", (Dog dog) =>
 
 #endregion
 
+#region CityEndpoints
+//  Get Cities
 app.MapGet("/api/cities", () =>
 {
     return cities;
 });
+#endregion
 
 #endregion
 

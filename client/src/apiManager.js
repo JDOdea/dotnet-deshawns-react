@@ -17,3 +17,8 @@ export const postDog = async (dogObject) => {
     body: JSON.stringify(dogObject)
   });
 }
+
+export const getCities = async () => {
+  const res = await fetch("/api/cities");
+  return res.json();
+}
