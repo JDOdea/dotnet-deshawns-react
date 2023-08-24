@@ -248,10 +248,21 @@ app.MapPost("/api/dogs", (Dog dog) =>
 
 #endregion
 
+#region CityEndpoints
+//  Get Cities
 app.MapGet("/api/cities", () =>
 {
     return cities;
 });
+
+// Post City
+app.MapPost("/api/cities", (City city) =>
+{
+    city.Id = cities.Count > 0 ? cities.Max(c => c.Id) + 1 : 1;
+    cities.Add(city);
+    return city;
+});
+#endregion
 
 #endregion
 
