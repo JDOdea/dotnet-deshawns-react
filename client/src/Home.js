@@ -17,7 +17,7 @@ export default function Home() {
 
   return (
     <>
-      <p>{greeting.message}</p>
+      <p className="home-greeting">{greeting.message}</p>
       <DogsList />
     </>
   );
