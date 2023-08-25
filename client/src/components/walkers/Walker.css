@@ -1,0 +1,22 @@
+.walkers {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+}
+
+.walker {
+    background-color: bisque;
+    width: 20rem;
+    height: 10rem;
+    padding: 0.5rem;
+    margin: 2.5rem;
+    border-radius: 1.5rem;
+}
+
+.walker:hover {
+    filter: brightness(0.9);
+}
+
+.walker-header {
+    font-weight: 500;
+}
