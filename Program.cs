@@ -495,6 +495,18 @@ app.MapPut("/api/walkers/{id}", (int id, List<City> currentCities) =>
 
     return Results.Ok();
 });
+
+//  Delete Walker
+app.MapDelete("/api/walkers/{id}", (int id) =>
+{
+    Walker walker = walkers.FirstOrDefault(w => w.Id == id);
+    if (walker == null)
+    {
+        return Results.NotFound();
+    }
+    walkers.RemoveAt(id - 1);
+    return Results.Ok();
+});
 #endregion
 
 #endregion
