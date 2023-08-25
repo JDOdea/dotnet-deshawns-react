@@ -58,6 +58,11 @@ export const getOneWalker = async (id) => {
   return res.json();
 }
 
+export const deleteWalker = async (id) => {
+  await fetch(`/api/walkers/${id}`, {
+    method: "DELETE"})
+}
+
 export const getWalkerCities = async () => {
   const res = await fetch("/api/walkercities");
   return res.json();

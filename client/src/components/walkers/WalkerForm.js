@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getCities, getDogs } from "../../apiManager";
+import { deleteWalker, getCities, getDogs } from "../../apiManager";
 
 export const WalkerForm = ({ trigger, setTrigger, walkerObject, getAllWalkers }) => {
     const [walker, update] = useState({
@@ -23,6 +23,11 @@ export const WalkerForm = ({ trigger, setTrigger, walkerObject, getAllWalkers })
         },
         []
     )
+
+    const handleDeleteButton = () => {
+        deleteWalker(walker.id)
+        setTrigger(false)
+    }
 
     return (trigger) ?
     (
@@ -90,6 +95,10 @@ export const WalkerForm = ({ trigger, setTrigger, walkerObject, getAllWalkers })
                             }
                         </div>
                     </fieldset>
+                    <button
+                    onClick={() => {
+                        handleDeleteButton()
+                    }}>Remove</button>
                 </form>
             </div>
         </div>
