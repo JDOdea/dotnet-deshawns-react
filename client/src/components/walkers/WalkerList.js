@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import { getCities, getOneCity, getWalkerCities, getWalkers } from "../../apiManager";
 import { Walker } from "./Walker";
 import "./Walker.css"
+import { WalkerForm } from "./WalkerForm";
 
 export const WalkerList = () => {
     const [walkers, setWalkers] = useState([]);
     const [filtered, setFiltered] = useState([]);
     const [cities, setCities] = useState([]);
-    const [selectedCity, setSelectedCity] = useState(undefined);
     const [walkercities, setWalkercities] = useState([]);
-    const [test, setTest] = useState([]);
+    const [upWalker, setUpWalker] = useState({});
+    const [popup, setPopup] = useState(false);
 
     const getAllWalkers = () => {
         getWalkers()
@@ -78,11 +79,19 @@ export const WalkerList = () => {
                     filtered.map(
                         (walker) => <Walker 
                         walkerObject={walker}
+                        setUpWalker={setUpWalker}
+                        setPopup={setPopup}
                         key={`walker--${walker.id}`}
                         />
                     )
                 }
             </article>
+            <WalkerForm
+            trigger={popup}
+            setTrigger={setPopup}
+            walkerObject={upWalker}
+            getAllWalkers={getAllWalkers}
+            />
         </>
     )
 }
