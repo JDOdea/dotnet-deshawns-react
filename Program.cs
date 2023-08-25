@@ -384,6 +384,18 @@ app.MapPost("/api/dogs", (Dog dog) =>
     return dog;
 });
 
+//  Delete Dog
+app.MapDelete("/api/dogs/{id}", (int id) =>
+{
+    Dog dog = dogs.FirstOrDefault(d => d.Id == id);
+    if (dog == null)
+    {
+        return Results.NotFound();
+    }
+    dogs.RemoveAt(id - 1);
+    return Results.Ok();
+});
+
 #endregion
 
 #region CityEndpoints

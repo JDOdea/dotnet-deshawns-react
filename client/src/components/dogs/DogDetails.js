@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import { deleteDog } from "../../apiManager";
 
-export const DogDetails = ({ trigger, setTrigger, dogObject }) => {
+export const DogDetails = ({ trigger, setTrigger, dogObject, getAllDogs }) => {
     const [dog, setDog] = useState({});
 
     useEffect(
@@ -9,6 +10,11 @@ export const DogDetails = ({ trigger, setTrigger, dogObject }) => {
         },
         [dogObject]
     )
+
+    const handleDeleteButton = () => {
+        deleteDog(dog.id)
+        setTrigger(false)
+    }
 
     return (trigger) ?
     (
@@ -25,6 +31,13 @@ export const DogDetails = ({ trigger, setTrigger, dogObject }) => {
                 <div>
                     {dog.breed}
                 </div>
+                <footer>
+                    <button
+                    onClick={() => {handleDeleteButton()}}
+                    >
+                        Remove
+                    </button>
+                </footer>
             </div>
         </div>
     )

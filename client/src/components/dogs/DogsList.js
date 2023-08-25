@@ -62,6 +62,7 @@ export const DogsList = () => {
             trigger={dogDetails}
             setTrigger={setDogDetails}
             dogObject={upDog}
+            getAllDogs={getAllDogs}
             >
             </DogDetails>
         </>
