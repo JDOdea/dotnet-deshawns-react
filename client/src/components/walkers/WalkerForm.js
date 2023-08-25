@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getCities } from "../../apiManager";
+import { getCities, getDogs } from "../../apiManager";
 
 export const WalkerForm = ({ trigger, setTrigger, walkerObject, getAllWalkers }) => {
     const [walker, update] = useState({
@@ -7,12 +7,18 @@ export const WalkerForm = ({ trigger, setTrigger, walkerObject, getAllWalkers })
         cities: []
     });
     const [cities, setCities] = useState([]);
+    const [dogs, setDogs] = useState([]);
 
     useEffect(
         () => {
             getCities()
                 .then((data) => {
                     setCities(data)
+                })
+
+            getDogs()
+                .then((data) => {
+                    setDogs(data)
                 })
         },
         []
@@ -65,6 +71,23 @@ export const WalkerForm = ({ trigger, setTrigger, walkerObject, getAllWalkers })
                                         )
                                     })
                                 }
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div className="form-group">
+                            <label htmlFor="dogs">Assigned Dogs:</label>
+                            {
+                                dogs.map((dog) => {
+                                    return (
+                                        <>
+                                        <input type="radio"
+                                        id={`${dog.id}`}
+                                        name={`${dog.name}`} />
+                                        <label for={`${dog.id}`}>{dog.name}</label>
+                                        </>
+                                    )
+                                })
+                            }
                         </div>
                     </fieldset>
                 </form>
