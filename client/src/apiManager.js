@@ -8,6 +8,11 @@ export const getDogs = async () => {
   return res.json();
 }
 
+export const getOneDog = async (id) => {
+  const res = await fetch(`/api/dogs/${id}`);
+  return res.json();
+}
+
 export const postDog = async (dogObject) => {
   await fetch("/api/dogs", {
     method: "POST",
@@ -23,6 +28,11 @@ export const getCities = async () => {
   return res.json();
 }
 
+export const getOneCity = async (id) => {
+  const res = await fetch(`/api/cities/${id}`);
+  return res.json();
+}
+
 export const postCity = async (cityObject) => {
   await fetch("/api/cities", {
     method: "POST",
@@ -30,5 +40,30 @@ export const postCity = async (cityObject) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(cityObject)
+  });
+}
+
+export const getWalkers = async () => {
+  const res = await fetch("/api/walkers");
+  return res.json();
+}
+
+export const getOneWalker = async (id) => {
+  const res = await fetch(`/api/walkers/${id}`);
+  return res.json();
+}
+
+export const getWalkerCities = async () => {
+  const res = await fetch("/api/walkercities");
+  return res.json();
+}
+
+export const putWalkerCities = async (id, cities) => {
+  await fetch(`/api/walkercities/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(cities)
   });
 }

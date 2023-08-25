@@ -200,6 +200,96 @@ List<Walker> walkers = new List<Walker>()
     }
 };
 
+//  WalkerCities
+List<WalkerCity> walkerCities = new List<WalkerCity>()
+{
+    new WalkerCity()
+    {
+        Id = 1,
+        WalkerId = 10,
+        CityId = 1
+    },
+    new WalkerCity()
+    {
+        Id = 2,
+        WalkerId = 8,
+        CityId = 6
+    },
+    new WalkerCity()
+    {
+        Id = 3,
+        WalkerId = 5,
+        CityId = 4
+    },
+    new WalkerCity()
+    {
+        Id = 4,
+        WalkerId = 9,
+        CityId = 10
+    },
+    new WalkerCity()
+    {
+        Id = 5,
+        WalkerId = 2,
+        CityId = 3
+    },
+    new WalkerCity()
+    {
+        Id = 6,
+        WalkerId = 4,
+        CityId = 7
+    },
+    new WalkerCity()
+    {
+        Id = 7,
+        WalkerId = 1,
+        CityId = 5
+    },
+    new WalkerCity()
+    {
+        Id = 8,
+        WalkerId = 7,
+        CityId = 9
+    },
+    new WalkerCity()
+    {
+        Id = 9,
+        WalkerId = 3,
+        CityId = 2
+    },
+    new WalkerCity()
+    {
+        Id = 10,
+        WalkerId = 6,
+        CityId = 8
+    },
+    new WalkerCity()
+    {
+        Id = 11,
+        WalkerId = 6,
+        CityId = 9
+    },
+    new WalkerCity()
+    {
+        Id = 12,
+        WalkerId = 9,
+        CityId = 7
+    },
+    new WalkerCity()
+    {
+        Id = 13,
+        WalkerId = 5,
+        CityId = 7
+    },
+    new WalkerCity()
+    {
+        Id = 14,
+        WalkerId = 10,
+        CityId = 2
+    }
+    
+};
+
 #endregion
 
 #region Default Needs
@@ -222,6 +312,42 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 #endregion
 
+#region Utitily Functions
+
+//  Getting Cities for a Walker
+void WalkerCityMatch(Walker walker)
+{
+    List<WalkerCity> assignments = walkerCities.Where(wc => wc.WalkerId == walker.Id).ToList();
+    //  Curriculum solution (causes error "cannot implicitly convert type 'int' to 'bool'")
+    /* List<City> citiesForWalker = assignments.Select(wc => cities.First(c => c.Id = wc.CityId)); */
+    List<City> matchedCities = new List<City>();
+    foreach (WalkerCity assignment in assignments)
+    {
+        matchedCities.Add(cities.FirstOrDefault(c => c.Id == assignment.CityId));
+    }
+    walker.Cities = matchedCities;
+};
+
+//  Updating Cities for a Walker
+
+void UpdateWalkerCities(Walker walker)
+{
+    
+};
+
+//  Getting Walkers for a City
+void CityWalkerMatch(City city)
+{
+    List<WalkerCity> assignments = walkerCities.Where(wc => wc.CityId == city.Id).ToList();
+    List<Walker> matchedWalkers = new List<Walker>();
+    foreach (WalkerCity assignment in assignments)
+    {
+        matchedWalkers.Add(walkers.FirstOrDefault(w => w.Id == assignment.WalkerId));
+    }
+    city.Walkers = matchedWalkers;
+};
+#endregion
+
 #region Endpoints
 //  Get Message
 app.MapGet("/api/hello", () =>
@@ -234,6 +360,18 @@ app.MapGet("/api/hello", () =>
 app.MapGet("/api/dogs", () =>
 {
     return dogs;
+});
+
+//  Get Specific Dog
+app.MapGet("/api/dogs/{id}", (int id) =>
+{
+    Dog dog = dogs.FirstOrDefault(d => d.Id == id);
+    if (dog == null)
+    {
+        return Results.NotFound();
+    }
+
+    return Results.Ok(dog);
 });
 
 //  Post Dog
@@ -255,12 +393,95 @@ app.MapGet("/api/cities", () =>
     return cities;
 });
 
+//  Get Specific City
+app.MapGet("/api/cities/{id}", (int id) =>
+{
+    City city = cities.First(c => c.Id == id);
+    if (city == null)
+    {
+        return Results.NotFound();
+    }
+    if (id != city.Id)
+    {
+        return Results.BadRequest();
+    }
+    //  Get City's Walkers
+    List<WalkerCity> walkerCitiesForCity1 = walkerCities.Where(wc => wc.CityId == id).ToList();
+
+    List<Walker> walkersFor1 = walkerCitiesForCity1.Select(wc => walkers.First(w => w.Id == wc.WalkerId)).ToList();
+
+    city.Walkers = walkersFor1;
+
+    return Results.Ok(city);
+});
+
 // Post City
 app.MapPost("/api/cities", (City city) =>
 {
     city.Id = cities.Count > 0 ? cities.Max(c => c.Id) + 1 : 1;
     cities.Add(city);
     return city;
+});
+#endregion
+
+#region WalkerCityEndpoints
+//  Get WalkerCities
+app.MapGet("/api/walkercities", () =>
+{
+    return walkerCities;
+});
+#endregion
+
+#region WalkerEndpoints
+//  Get Walkers
+app.MapGet("/api/walkers", () =>
+{
+    return walkers;
+});
+
+//  Get Specific Walker
+app.MapGet("/api/walkers/{id}", (int id) =>
+{
+    Walker walker = walkers.FirstOrDefault(w => w.Id == id);
+    if (walker == null)
+    {
+        return Results.NotFound();
+    }
+    //  Get Walker's Cities
+    List<WalkerCity> walkerCitiesForWalker1 = walkerCities.Where(wc => wc.WalkerId == id).ToList();
+
+    List<City> citiesFor1 = walkerCitiesForWalker1.Select(wc => cities.First(c => c.Id == wc.CityId)).ToList();
+
+    walker.Cities = citiesFor1;
+
+    return Results.Ok(walker);
+});
+
+//  Update Cities for Walker
+app.MapPut("/api/walkers/{id}", (int id, List<City> currentCities) => 
+{
+    //  Get Requested Walker
+    Walker walker = walkers.FirstOrDefault(w => w.Id == id);
+    if (walker == null)
+    {
+        return Results.NotFound();
+    }
+
+    walkerCities = walkerCities.Where(wc => wc.WalkerId != walker.Id).ToList();
+
+    foreach (City city in walker.Cities)
+    {
+        WalkerCity newWC = new WalkerCity
+        {
+            WalkerId = walker.Id,
+            CityId = city.Id
+        };
+        newWC.CityId = walkerCities.Count > 0 ? walkerCities.Max(wc => wc.Id) + 1 : 1;
+        walkerCities.Add(newWC);
+    }
+    
+
+    return Results.Ok();
 });
 #endregion
 
