@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const Walker = ({ walkerObject }) => {
+export const Walker = ({ walkerObject, setUpWalker, setPopup }) => {
     const [walker, setWalker] = useState({});
 
     useEffect(
@@ -10,7 +10,13 @@ export const Walker = ({ walkerObject }) => {
         []
     )
 
-    return <section className="walker">
+    return <section 
+    onClick={() => {
+        setUpWalker(walker)
+        setPopup(true)
+    }}
+    className="walker"
+    >
         <header className="walker-header">
             {walker.name}
         </header>
