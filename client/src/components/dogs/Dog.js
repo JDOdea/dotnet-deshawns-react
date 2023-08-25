@@ -20,5 +20,6 @@ export const Dog = ({ dogObject, setDogDetails, setUpDog }) => {
         <header className="dog-header">
             {dog.name}
         </header>
+        
     </section>
 }

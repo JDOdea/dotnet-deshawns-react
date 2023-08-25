@@ -23,6 +23,11 @@ export const postDog = async (dogObject) => {
   });
 }
 
+export const deleteDog = async (id) => {
+  await fetch(`/api/dogs/${id}`, {
+    method: "DELETE"})
+}
+
 export const getCities = async () => {
   const res = await fetch("/api/cities");
   return res.json();
