@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const Dog = ({ dogObject }) => {
+export const Dog = ({ dogObject, setDogDetails, setUpDog }) => {
     const [dog, setDog] = useState({});
 
     useEffect(
@@ -10,7 +10,13 @@ export const Dog = ({ dogObject }) => {
         []
     )
 
-    return <section className="dog">
+    return <section 
+            onClick={() => {
+                setUpDog(dog)
+                setDogDetails(true)
+            }}
+            className="dog"
+            >
         <header className="dog-header">
             {dog.name}
         </header>
