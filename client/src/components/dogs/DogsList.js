@@ -3,10 +3,15 @@ import { Dog } from "./Dog";
 import "./Dogs.css"
 import { DogForm } from "./DogForm";
 import { getDogs } from "../../apiManager";
+import { DogDetails } from "./DogDetails";
+
 
 export const DogsList = () => {
     const [dogs, setDogs] = useState([]);
+    const [upDog, setUpDog] = useState({});
     const [buttonPopup, setButtonPopup] = useState(false);
+    const [dogDetails, setDogDetails] = useState(false);
+    
 
     const getAllDogs = () => {
         getDogs()
@@ -34,11 +39,14 @@ export const DogsList = () => {
                 onClick={() => setButtonPopup(true)}
                 >Add Dog</button>
             </div>
-            <article className="dogs">
+            <article 
+            className="dogs">
                 {
                     dogs.map(
                         (dog) => <Dog
                         dogObject={dog}
+                        setDogDetails={setDogDetails}
+                        setUpDog={setUpDog}
                         key={`dog--${dog.id}`}
                         />
                     )
@@ -50,6 +58,12 @@ export const DogsList = () => {
             getAllDogs={getAllDogs}
             >
             </DogForm>
+            <DogDetails
+            trigger={dogDetails}
+            setTrigger={setDogDetails}
+            dogObject={upDog}
+            >
+            </DogDetails>
         </>
     )
 }
