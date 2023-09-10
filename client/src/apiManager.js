@@ -68,12 +68,12 @@ export const getWalkerCities = async () => {
   return res.json();
 }
 
-export const putWalkerCities = async (id, cities) => {
-  await fetch(`/api/walkercities/${id}`, {
+export const putWalkerCities = async (id, updatedWalker) => {
+  await fetch(`/api/walkers/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(cities)
+    body: JSON.stringify(updatedWalker)
   });
 }

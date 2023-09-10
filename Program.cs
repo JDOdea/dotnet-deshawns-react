@@ -9,14 +9,16 @@ List<Dog> dogs = new List<Dog>()
         Id = 1,
         Name = "Timmy",
         Breed = "Border Collie",
-        CityId = 3
+        CityId = 3,
+        WalkerId = 2
     },
     new Dog()
     {
         Id = 2,
         Name = "Rocket",
         Breed = "Terrier",
-        CityId = 6
+        CityId = 6,
+        WalkerId = 8
     },
     new Dog()
     {
@@ -30,21 +32,23 @@ List<Dog> dogs = new List<Dog>()
         Id = 4,
         Name = "Big Bear",
         Breed = "Poodle",
-        CityId = 8
+        CityId = 8,
+        WalkerId = 2
     },
     new Dog()
     {
         Id = 5,
         Name = "Hazel",
         Breed = "Sheepdog",
-        CityId = 9
+        CityId = 3
     },
     new Dog()
     {
         Id = 6,
         Name = "Scotty",
         Breed = "Golden Doodle",
-        CityId = 7
+        CityId = 7,
+        WalkerId = 1
     },
     new Dog()
     {
@@ -65,28 +69,32 @@ List<Dog> dogs = new List<Dog>()
         Id = 9,
         Name = "Harold",
         Breed = "Dachsund",
-        CityId = 4
+        CityId = 4,
+        WalkerId = 4
     },
     new Dog()
     {
         Id = 10,
         Name = "Cat",
         Breed = "Labrador",
-        CityId = 2
+        CityId = 2,
+        WalkerId = 7
     },
     new Dog()
     {
         Id = 11,
         Name = "Brutus",
         Breed = "Golden Retriever",
-        CityId = 5
+        CityId = 5,
+        WalkerId = 9
     },
     new Dog()
     {
         Id = 12,
         Name = "Philmore",
         Breed = "Pug",
-        CityId = 10
+        CityId = 10,
+        WalkerId = 2
     }
 };
 
@@ -312,41 +320,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 #endregion
 
-#region Utitily Functions
-
-//  Getting Cities for a Walker
-void WalkerCityMatch(Walker walker)
-{
-    List<WalkerCity> assignments = walkerCities.Where(wc => wc.WalkerId == walker.Id).ToList();
-    //  Curriculum solution (causes error "cannot implicitly convert type 'int' to 'bool'")
-    /* List<City> citiesForWalker = assignments.Select(wc => cities.First(c => c.Id = wc.CityId)); */
-    List<City> matchedCities = new List<City>();
-    foreach (WalkerCity assignment in assignments)
-    {
-        matchedCities.Add(cities.FirstOrDefault(c => c.Id == assignment.CityId));
-    }
-    walker.Cities = matchedCities;
-};
-
-//  Updating Cities for a Walker
-
-void UpdateWalkerCities(Walker walker)
-{
-    
-};
-
-//  Getting Walkers for a City
-void CityWalkerMatch(City city)
-{
-    List<WalkerCity> assignments = walkerCities.Where(wc => wc.CityId == city.Id).ToList();
-    List<Walker> matchedWalkers = new List<Walker>();
-    foreach (WalkerCity assignment in assignments)
-    {
-        matchedWalkers.Add(walkers.FirstOrDefault(w => w.Id == assignment.WalkerId));
-    }
-    city.Walkers = matchedWalkers;
-};
-#endregion
 
 #region Endpoints
 //  Get Message
@@ -359,7 +332,7 @@ app.MapGet("/api/hello", () =>
 //  Get Dogs
 app.MapGet("/api/dogs", () =>
 {
-    return dogs;
+    return dogs.OrderBy(d => d.Id);
 });
 
 //  Get Specific Dog
@@ -469,8 +442,8 @@ app.MapGet("/api/walkers/{id}", (int id) =>
     return Results.Ok(walker);
 });
 
-//  Update Cities for Walker
-app.MapPut("/api/walkers/{id}", (int id, List<City> currentCities) => 
+//  Update Walker
+app.MapPut("/api/walkers/{id}", (int id, Walker walkerUpdate) => 
 {
     //  Get Requested Walker
     Walker walker = walkers.FirstOrDefault(w => w.Id == id);
@@ -479,16 +452,35 @@ app.MapPut("/api/walkers/{id}", (int id, List<City> currentCities) =>
         return Results.NotFound();
     }
 
+    //  Get List of Dogs walked by Walker
+    List<Dog> walkerDogs = dogs.Where(d => d.WalkerId == id).ToList();
+
+    //  For each Dog being walked by old Walker, set WalkerId to 0
+    foreach (Dog dog in walkerDogs)
+    {
+        dog.WalkerId = null;
+    }
+
+    //  For each Dog being walked by updated Walker
+    foreach (int dogId in walkerUpdate.DogIds)
+    {
+        Dog matchedDog = dogs.SingleOrDefault(d => d.Id == dogId);
+        matchedDog.WalkerId = id;
+    }
+
+    //  Edit WalkerCities list to not have Walker's Citys
     walkerCities = walkerCities.Where(wc => wc.WalkerId != walker.Id).ToList();
 
-    foreach (City city in walker.Cities)
+
+    //  Create new WalkerCity Objects for matched Walker
+    foreach (int cityId in walkerUpdate.CityIds)
     {
         WalkerCity newWC = new WalkerCity
         {
+            Id = walkerCities.Count > 0 ? walkerCities.Max(wc => wc.Id) + 1 : 1,
             WalkerId = walker.Id,
-            CityId = city.Id
+            CityId = cityId
         };
-        newWC.CityId = walkerCities.Count > 0 ? walkerCities.Max(wc => wc.Id) + 1 : 1;
         walkerCities.Add(newWC);
     }
     
@@ -504,6 +496,16 @@ app.MapDelete("/api/walkers/{id}", (int id) =>
     {
         return Results.NotFound();
     }
+
+    //  Get List of Dogs walked by Walker
+    List<Dog> walkerDogs = dogs.Where(d => d.WalkerId == id).ToList();
+
+    //  For each Dog being walked by old Walker, set WalkerId to 0
+    foreach (Dog dog in walkerDogs)
+    {
+        dog.WalkerId = null;
+    }
+
     walkers.RemoveAt(id - 1);
     return Results.Ok();
 });
