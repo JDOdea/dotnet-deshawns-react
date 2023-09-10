@@ -51,3 +51,43 @@
     right: 16px;
     border-radius: 0.3rem;
 }
+
+.form-radios {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.form-cities {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-dogs {
+    display: flex;
+    flex-direction: column;
+}
+
+.walkerForm-bottom {
+    display: flex;
+    justify-content: space-around;
+}
+
+.walkerForm-cities .walkerForm-dogs {
+    margin: 15px;
+}
+
+.walkerForm-city {
+    display: flex;
+}
+
+.walkerForm-dog {
+    display: flex;
+}
+
+.walkerForm-checkbox {
+    margin-left: 8px;
+}
+
+.walkerForm-radio {
+    margin-left: 8px;
+}
